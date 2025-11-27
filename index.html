@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Угадай число</title>
+  <title>🎮 Угадай число от 1 до 100</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="game-container">
     <h1>🎮 Угадай число от 1 до 100!</h1>
-    <p>У тебя есть 7 попыток.</p>
+    <p class="subtitle">У тебя есть 7 попыток. Попробуй угадать загаданное число!</p>
 
-    <input type="number" id="userGuess" min="1" max="100" placeholder="Введи число" />
-    <button id="submitGuess">Проверить</button>
+    <div class="input-group">
+      <input type="number" id="userGuess" min="1" max="100" placeholder="Введи число" />
+      <button id="submitGuess">Проверить</button>
+    </div>
 
-    <div id="message"></div>
-    <div id="attempts"></div>
-    <button id="restart" style="display: none;">Начать заново</button>
+    <div id="message" class="message"></div>
+    <div id="attempts" class="attempts">Осталось попыток: 7</div>
+    <button id="restart" class="restart-btn" style="display: none;">🔄 Начать заново</button>
   </div>
 
   <script src="script.js"></script>
