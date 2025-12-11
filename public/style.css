@@ -1,0 +1,202 @@
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0a0512;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: background 0.6s ease;
+  }
+
+  .game-container {
+    background: rgba(30, 15, 45, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 0 30px rgba(140, 30, 200, 0.4);
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid rgba(140, 30, 200, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #9d00ff, #7b00e0, #9d00ff);
+    z-index: -1;
+    border-radius: 26px;
+    animation: borderGlow 3s infinite linear;
+  }
+
+  @keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+    color: white;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(140, 30, 200, 0.6);
+  }
+
+  .subtitle {
+    color: #e0e0ff;
+    font-size: 1.15rem;
+    margin-bottom: 1.8rem;
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+  }
+
+  input {
+    padding: 0.9rem 1.2rem;
+    font-size: 1.2rem;
+    width: 140px;
+    background: rgba(40, 20, 60, 0.7);
+    border: 2px solid #603080;
+    border-radius: 16px;
+    color: white;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+
+  input::placeholder {
+    color: #c0c0f0;
+    opacity: 0.7;
+  }
+
+  input:focus {
+    border-color: #9d00ff;
+    box-shadow: 0 0 12px rgba(157, 0, 255, 0.5);
+  }
+
+  button {
+    padding: 0.9rem 1.8rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(140, 30, 200, 0.5);
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  #submitGuess {
+    background: linear-gradient(135deg, #9d00ff, #7b00e0);
+    box-shadow: 0 4px 15px rgba(140, 30, 200, 0.4);
+  }
+
+  .restart-btn {
+    background: linear-gradient(135deg, #ff33cc, #ff00aa);
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 15px rgba(255, 0, 170, 0.4);
+    display: none;
+  }
+
+  .message {
+    margin: 1.6rem 0;
+    font-size: 1.25rem;
+    min-height: 2rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+    color: white;
+  }
+
+  .message.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .message.success-animation {
+    animation: glitch 0.6s infinite;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); color: #ff00cc; }
+    40% { transform: translate(3px, -3px); color: #9d00ff; }
+    60% { transform: translate(-3px, 0); color: #ff33cc; }
+    80% { transform: translate(3px, 3px); color: #7b00e0; }
+    100% { transform: translate(0); }
+  }
+
+  .attempts {
+    font-size: 1.15rem;
+    color: #e0e0ff;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 600px) {
+    .game-container {
+      padding: 1.8rem;
+      border-radius: 20px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    input {
+      width: 110px;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+    }
+
+    button {
+      padding: 0.8rem 1.4rem;
+      font-size: 1.05rem;
+    }
+  }

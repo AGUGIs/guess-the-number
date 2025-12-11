@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 Угадай число</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game-container">
+    <h1>🎮 Угадай число от 1 до 100!</h1>
+    <p class="subtitle">У тебя есть 7 попыток. Попробуй угадать загаданное число!</p>
+
+    <div class="input-group">
+      <input type="number" id="userGuess" min="1" max="100" placeholder="Введи число" />
+      <button id="submitGuess">Проверить</button>
+    </div>
+
+    <div id="message" class="message"></div>
+    <div id="attempts" class="attempts">Осталось попыток: 7</div>
+    <button id="restart" class="restart-btn" style="display: none;">🔄 Начать заново</button>
+  </div>
+
+  <script>
+    let gameOver = false;
+
+    const userGuessInput = document.getElementById('userGuess');
+    const submitButton = document.getElementById('submitGuess');
+    const messageDiv = document.getElementById('message');
+    const attemptsDiv = document.getElementById('attempts');
+    const restartButton = document.getElementById('restart');
+
+    function updateAttemptsDisplay(attemptsLeft) {
+      attemptsDiv.textContent = `Осталось попыток: ${attemptsLeft}`;
+    }
+
+    function showMessage(text, color) {
+      messageDiv.textContent = text;
+      messageDiv.style.color = color;
+      messageDiv.classList.remove('show');
+      setTimeout(() => {
+        messageDiv.classList.add('show');
+      }, 10);
+    }
+
+    async function startNewGame() {
+      try {
+        const response = await fetch('/api/start');
+        const data = await response.json();
+        gameOver = false;
+        updateAttemptsDisplay(data.attemptsLeft);
+        showMessage('Новая игра начата!', '#ffffff');
+        restartButton.style.display = 'none';
+        userGuessInput.value = '';
+        userGuessInput.focus();
+      } catch (err) {
+        showMessage('Ошибка при запуске игры.', '#ff9800');
+      }
+    }
+
+    async function checkGuess() {
+      if (gameOver) return;
+
+      const userGuess = userGuessInput.value;
+
+      try {
+        const response = await fetch('/api/guess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ guess: userGuess })
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'invalid') {
+          showMessage(result.message, '#ff9800');
+          return;
+        }
+
+        if (result.status === 'win') {
+          showMessage(result.message, '#4caf50');
+          gameOver = true;
+          restartButton.style.display = 'inline-block';
+          document.body.style.background = 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)';
+        } else if (result.status === 'lose') {
+          showMessage(result.message, '#f44336');
+          gameOver = true;
+          restartButton.style.display = 'inline-block';
+          document.body.style.background = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+        } else if (result.status === 'low' || result.status === 'high') {
+          showMessage(result.message, '#2196F3');
+        }
+
+        updateAttemptsDisplay(result.attemptsLeft);
+        userGuessInput.value = '';
+        userGuessInput.focus();
+
+      } catch (err) {
+        showMessage('Ошибка связи с сервером.', '#ff9800');
+      }
+    }
+
+    submitButton.addEventListener('click', checkGuess);
+
+    userGuessInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        checkGuess();
+      }
+    });
+
+    restartButton.addEventListener('click', startNewGame);
+
+    // Инициализация при загрузке
+    startNewGame();
+  </script>
+</body>
+</html>
