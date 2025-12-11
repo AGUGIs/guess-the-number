@@ -5,129 +5,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎮 Угадай число</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #00c6ff 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0c0c16;
+    color: #e0e0ff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: background 0.6s ease;
+  }
 
+  .game-container {
+    background: rgba(18, 18, 32, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 0 30px rgba(106, 17, 203, 0.4);
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid rgba(106, 17, 203, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #6a11cb, #00c6ff, #6a11cb);
+    z-index: -1;
+    border-radius: 26px;
+    animation: borderGlow 3s infinite linear;
+  }
+
+  @keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+    background: linear-gradient(90deg, #6a11cb, #00c6ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+
+  .subtitle {
+    color: #a0a0d0;
+    font-size: 1.15rem;
+    margin-bottom: 1.8rem;
+    line-height: 1.5;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+  }
+
+  input {
+    padding: 0.9rem 1.2rem;
+    font-size: 1.2rem;
+    width: 140px;
+    background: rgba(30, 30, 50, 0.7);
+    border: 2px solid #4a4a7a;
+    border-radius: 16px;
+    color: #ffffff;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+
+  input::placeholder {
+    color: #7070a0;
+  }
+
+  input:focus {
+    border-color: #00c6ff;
+    box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
+  }
+
+  button {
+    padding: 0.9rem 1.8rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.5);
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  #submitGuess {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+  }
+
+  .restart-btn {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+    display: none;
+  }
+
+  .message {
+    margin: 1.6rem 0;
+    font-size: 1.25rem;
+    min-height: 2rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+  }
+
+  .message.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .message.success-animation {
+    animation: glitch 0.6s infinite;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); color: #ff00c8; }
+    40% { transform: translate(3px, -3px); color: #00ffe5; }
+    60% { transform: translate(-3px, 0); color: #6a11cb; }
+    80% { transform: translate(3px, 3px); color: #00c6ff; }
+    100% { transform: translate(0); }
+  }
+
+  .attempts {
+    font-size: 1.15rem;
+    color: #b0b0e0;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
     .game-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 2.5rem;
+      padding: 1.8rem;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
-      color: #333;
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.9rem;
     }
 
     .subtitle {
-      color: #666;
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .input-group {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
+      font-size: 1rem;
     }
 
     input {
-      padding: 0.8rem 1rem;
+      width: 110px;
+      padding: 0.8rem;
       font-size: 1.1rem;
-      width: 120px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #2575fc;
-      box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
     }
 
     button {
-      padding: 0.8rem 1.5rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 0.8rem 1.4rem;
+      font-size: 1.05rem;
     }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    #submitGuess {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
-    }
-
-    .restart-btn {
-      background: linear-gradient(135deg, #ffcc00, #ff9900);
-      color: #333;
-      margin-top: 1rem;
-    }
-
-    .message {
-      margin: 1.5rem 0;
-      font-size: 1.2rem;
-      font-weight: bold;
-      min-height: 1.5rem;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .attempts {
-      font-size: 1.1rem;
-      color: #666;
-      margin-bottom: 1rem;
-    }
-
-    @media (max-width: 600px) {
-      .game-container {
-        padding: 1.5rem;
-      }
-      h1 { font-size: 1.8rem; }
-      input { width: 100px; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <div class="game-container">
